@@ -5,7 +5,8 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 ### Aptitude packages
 #########
 RUN apt-get update
-RUN	apt-get install -y default-jre wget git ftp nano python2.7-dev python-pip openssl openssh-server
+RUN	apt-get install -y default-jre wget git ftp nano python2.7-dev python-pip openssl openssh-server \
+	libopenmpi-dev openmpi-bin openmpi-common
 
 #########
 ### Working dir
