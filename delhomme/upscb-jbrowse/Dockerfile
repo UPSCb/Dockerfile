@@ -5,7 +5,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 ### Aptitude packages
 #########
 RUN apt-get update
-RUN	apt-get install -y build-essential curl unzip apache2
+RUN	apt install -y build-essential curl unzip apache2 libghc-zlib-dev
 
 #########
 ### Working dir
@@ -21,6 +21,11 @@ RUN echo 'training:training' | chpasswd
 RUN chsh -s /bin/bash training
 RUN echo "alias ll='ls -la -G'" >> /home/training/.profile
 RUN	usermod -G training,www-data training
+
+#########
+### JBrowse dep
+#########
+RUN cpan App::cpanminus && cpanm PerlIO::gzip
 
 #########
 ### JBrowse to easily view biological data formats
