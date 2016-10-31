@@ -1,11 +1,5 @@
 FROM delhomme/upscb-ngs-preprocessing
 MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
-
-#########
-### Aptitude packages
-#########
-RUN apt-get update
-RUN	apt-get install -y libghc-zlib-dev
 	
 #########
 ### Working dir
