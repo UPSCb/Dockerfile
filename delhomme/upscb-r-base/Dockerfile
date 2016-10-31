@@ -17,6 +17,11 @@ RUN	apt-get install -y \
 WORKDIR /build
 
 #########
+### Squash locale warnings
+#########
+RUN locale-gen en_US.UTF-8
+
+#########
 ### R version 3.3.1
 #########
 RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.1.tar.gz && \

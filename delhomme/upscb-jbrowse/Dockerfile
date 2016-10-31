@@ -8,6 +8,11 @@ RUN apt-get update
 RUN	apt install -y build-essential curl unzip apache2 libghc-zlib-dev
 
 #########
+### Squash locale warnings
+#########
+RUN locale-gen en_US.UTF-8
+
+#########
 ### Working dir
 #########
 RUN	mkdir build 
