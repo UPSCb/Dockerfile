@@ -2,6 +2,12 @@ FROM delhomme/upscb-rstudio
 MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 
 #########
+### Aptitude packages
+#########
+RUN apt-get update
+RUN apt install -y curl
+
+#########
 # R packages
 #########
 WORKDIR /home/training
@@ -16,6 +22,7 @@ RUN Rscript R-install-packages.R
 RUN	mkdir /build
 WORKDIR /build 
 RUN curl ftp://130.239.72.87/Facility/Workshop/RnaSeqTutorial_0.99.5.tar.gz > RnaSeqTutorial_0.99.5.tar.gz
+
 RUN R CMD INSTALL RnaSeqTutorial_0.99.5.tar.gz
 
 ########
