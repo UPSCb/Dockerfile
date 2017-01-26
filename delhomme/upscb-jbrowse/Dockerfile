@@ -5,7 +5,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 ### Aptitude packages
 #########
 RUN apt-get update
-RUN	apt install -y build-essential curl unzip apache2 libghc-zlib-dev
+RUN	apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev
 
 #########
 ### Squash locale warnings
