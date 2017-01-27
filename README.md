@@ -17,10 +17,12 @@ Sorted in dependencies order:
 * R and R-studio based
 
 1. upscb-r-base
-
 2. upscb-rstudio
-
 3. upscb-rstudio-sequencing
+
+* Others:
+
+1. upscb-nodejs
 
 ## Installation
 
@@ -109,42 +111,48 @@ respectively.
 ### R and R-studio based
 
 1. upscb-r-base
-Simply install base R and create the user training from the group training with password
-training. The default R installation directory is configured to be /home/training/.r-library.
+   Simply install base R and create the user training from the group training with password
+   training. The default R installation directory is configured to be /home/training/.r-library.
 
 2. upscb-rstudio
-Install RStudio server (the non-commercial edition). It exposes port
-8787 (web browser access to RStudio). Here is the run command that
-will start the docker and map port 8787 on port 12001
+   Install RStudio server (the non-commercial edition). It exposes port
+   8787 (web browser access to RStudio). Here is the run command that
+   will start the docker and map port 8787 on port 12001
 
 ```{bash}
 docker run -d -p 12001:8787 delhomme/upscb-r-studio
 ```
 
 3. upscb-rstudio-sequencing
-Build on the above, installing all the necessary R/Bioconductor
-packages for the analysis of RNA-Seq data.
+   Build on the above, installing all the necessary R/Bioconductor
+   packages for the analysis of RNA-Seq data.
+
+## Others
+
+1. upscb-nodejs
+
+   A simple container containing a git checkout of our nodejs website used for courses and workshops.
 
 ## Some more docker commands
 
 * to list the images
-`docker images`
+  `docker images`
 
 * to remove images
-`docker rmi [image ID]`
+  `docker rmi [image ID]`
 
 * to list containers
-`docker ps -a`
+  `docker ps -a`
 
 * to stop a container
-`docker stop [container ID]`
+  `docker stop [container ID]`
 
 * to remove a container
-`docker rm [container ID]`
+  `docker rm [container ID]`
 
 * both in oneline
-`docker rm $(docker stop [container ID])`
+  `docker rm $(docker stop [container ID])`
 
 * to connect to a container as root, activating some terminal support
-`docker exec -ti [container ID] env TERM=xterm bash`
+  `docker exec -ti [container ID] env TERM=xterm bash`
 
