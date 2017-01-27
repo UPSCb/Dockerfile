@@ -32,6 +32,7 @@ scran
 seqLogo
 shiny
 ShortRead
+testthat
 TxDb.Dmelanogaster.UCSC.dm3.ensGene
 tximport
 VennDiagram
