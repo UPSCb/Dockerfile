@@ -10,6 +10,7 @@ DEXSeq
 DiffBind
 easyRNASeq
 edgeR
+EnsDb.Hsapiens.v75
 genomeIntervals
 GenomicAlignments
 GenomicFeatures
