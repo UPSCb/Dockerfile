@@ -53,6 +53,7 @@ RUN	pip install multiqc
 #########
 ### GateOne SSH interface
 #########
+RUN pip install tornado==4.4.3
 RUN git clone https://github.com/liftoff/GateOne/ && \
     cd GateOne && python setup.py install && \
     python run_gateone.py --configure && cd ..
