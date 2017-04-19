@@ -8,47 +8,61 @@ RUN	mkdir build
 WORKDIR /build
 
 #########
+### Aptitude packages
+#########
+RUN apt update && apt install -y liblzma-dev libbz2-dev
+
+#########
 ### HTSlib tools: Samtools, Bcftools
 #########
-RUN wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 \
-	https://github.com/samtools/bcftools/releases/download/1.3.1/bcftools-1.3.1.tar.bz2 \
-	https://github.com/samtools/htslib/releases/download/1.3.1/htslib-1.3.1.tar.bz2 && \
-	tar -xf htslib-1.3.1.tar.bz2
-WORKDIR htslib-1.3.1
+RUN wget https://github.com/samtools/samtools/releases/download/1.4/samtools-1.4.tar.bz2 \
+	https://github.com/samtools/bcftools/releases/download/1.4/bcftools-1.4.tar.bz2 \
+	https://github.com/samtools/htslib/releases/download/1.4/htslib-1.4.tar.bz2 && \
+	tar -xf htslib-1.4.tar.bz2
+WORKDIR htslib-1.4
 RUN ./configure && make && make install
 WORKDIR /build
-RUN tar -xf bcftools-1.3.1.tar.bz2
-WORKDIR bcftools-1.3.1
+RUN tar -xf bcftools-1.4.tar.bz2
+WORKDIR bcftools-1.4
 RUN make && make install
 WORKDIR /build
-RUN tar -xf samtools-1.3.1.tar.bz2
-WORKDIR samtools-1.3.1
+RUN tar -xf samtools-1.4.tar.bz2
+WORKDIR samtools-1.4
 RUN make && make install
 WORKDIR /build
 
 #########
 ### STAR
 #########
-RUN wget https://github.com/alexdobin/STAR/archive/2.5.2b.tar.gz && \
-	tar -xf 2.5.2b.tar.gz
-WORKDIR STAR-2.5.2b/bin/Linux_x86_64_static
+RUN wget https://github.com/alexdobin/STAR/archive/2.5.3a.tar.gz && \
+	tar -xf 2.5.3a.tar.gz
+WORKDIR STAR-2.5.3a/bin/Linux_x86_64_static
 RUN cp STAR /usr/local/bin
 WORKDIR /build
 
 #########
 ### kallisto
 #########
-RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.43.0/kallisto_linux-v0.43.0.tar.gz && \
-	tar -xf kallisto_linux-v0.43.0.tar.gz
-WORKDIR kallisto_linux-v0.43.0
+RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.43.1/kallisto_linux-v0.43.1.tar.gz && \
+	tar -xf kallisto_linux-v0.43.1.tar.gz
+WORKDIR kallisto_linux-v0.43.1
 RUN cp kallisto /usr/local/bin
 WORKDIR /build
+
+#########
+### Salmon
+#########
+WORKDIR build
+RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v0.8.2/Salmon-0.8.2_linux_x86_64.tar.gz && \
+    tar -xf Salmon-0.8.2_linux_x86_64.tar.gz && \
+    cp Salmon-0.8.2_linux_x86_64/bin/salmon /usr/local/bin && \
+    cp Salmon-0.8.2_linux_x86_64/lib/* /usr/local/lib/.
 
 #########
 ### Pip installs: HTSeq
 #########
 # PySam
-RUN	pip install htseq
+RUN pip install htseq
 
 #########
 ### Clean up

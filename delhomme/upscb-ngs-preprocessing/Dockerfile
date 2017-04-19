@@ -31,10 +31,11 @@ RUN wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5
 #########
 ### SortmeRNA
 #########
-RUN wget http://bioinfo.lifl.fr/RNA/sortmerna/code/sortmerna-2.1-linux-64.tar.gz && \
-	tar -xf sortmerna-2.1-linux-64.tar.gz
-WORKDIR sortmerna-2.1-linux-64
-RUN cp sortmerna /usr/local/bin && cp indexdb_rna /usr/local/bin && \
+RUN wget https://github.com/biocore/sortmerna/archive/2.1.tar.gz && \
+    tar -xf 2.1.tar.gz
+WORKDIR sortmerna-2.1
+RUN ./configure && make -j 6 && make install || true
+RUN cp indexdb_rna /usr/local/bin && \
   cp scripts/merge-paired-reads.sh /usr/local/bin && cp scripts/unmerge-paired-reads.sh /usr/local/bin && \
 	cp -r rRNA_databases/ /usr/share/
 WORKDIR /usr/share/rRNA_databases
@@ -48,7 +49,7 @@ WORKDIR /build
 #########
 ### Pip installs: multiQC
 #########
-RUN	pip install multiqc
+RUN pip install multiqc
 
 #########
 ### GateOne SSH interface
