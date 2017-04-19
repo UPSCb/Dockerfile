@@ -34,7 +34,7 @@ RUN wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5
 RUN wget https://github.com/biocore/sortmerna/archive/2.1.tar.gz && \
     tar -xf 2.1.tar.gz
 WORKDIR sortmerna-2.1
-RUN ./configure && make -j 6 && make install || true
+RUN ./configure && make && make install || true
 RUN cp indexdb_rna /usr/local/bin && \
   cp scripts/merge-paired-reads.sh /usr/local/bin && cp scripts/unmerge-paired-reads.sh /usr/local/bin && \
 	cp -r rRNA_databases/ /usr/share/
