@@ -22,10 +22,10 @@ WORKDIR /build
 RUN locale-gen en_US.UTF-8
 
 #########
-### R version 3.3.1
+### R version 3.3.3
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.1.tar.gz && \
-    tar -zxf R-3.3.1.tar.gz && cd R-3.3.1 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.3.tar.gz && \
+    tar -zxf R-3.3.3.tar.gz && cd R-3.3.3 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
     make && make check && make pdf && make info && make install && make install-info && make install-pdf
