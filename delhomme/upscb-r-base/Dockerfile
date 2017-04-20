@@ -10,16 +10,19 @@ RUN echo "alias ll='ls -la -G'" >> /home/training/.profile
 #########
 RUN     apt-get update
 RUN	apt-get install -y \
-	build-essential wget libghc-zlib-dev libncurses-dev libbz2-dev liblzma-dev libpcre3-dev libxml2-dev \
-	libblas-dev gfortran git unzip ftp libzmq3-dev nano ftp fort77 libreadline-dev libcurl4-openssl-dev \
-	libx11-dev libxt-dev x11-common libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config zip && \
+	build-essential wget libghc-zlib-dev libncurses-dev libbz2-dev liblzma-dev libpcre3-dev libxml2-dev locales \
+	libblas-dev gfortran git unzip ftp libzmq3-dev nano ftp fort77 libreadline-dev libcurl4-openssl-dev default-jdk \
+	libx11-dev libxt-dev x11-common libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config texlive-latex-base \
+	texinfo texlive-fonts-extra zip supervisor && \
 	mkdir build
 WORKDIR /build
 
 #########
 ### Squash locale warnings
 #########
-RUN locale-gen en_US.UTF-8
+RUN rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
 
 #########
 ### R version 3.3.3
@@ -28,7 +31,8 @@ RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.3.tar.gz && \
     tar -zxf R-3.3.3.tar.gz && cd R-3.3.3 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
-    make && make check && make pdf && make info && make install && make install-info && make install-pdf
+    make && make pdf && make info && make install && make install-info && make install-pdf
+    ## make && make check && make pdf && make info && make install && make install-info && make install-pdf
 
 #########
 ### Cleanup
@@ -52,6 +56,5 @@ RUN mkdir /home/training/.r-library && \
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN mkdir /home/training/share
-RUN apt-get install -y supervisor
 VOLUME /home/training/share
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
