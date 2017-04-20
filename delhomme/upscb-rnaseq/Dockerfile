@@ -10,7 +10,7 @@ WORKDIR /build
 #########
 ### Aptitude packages
 #########
-RUN apt update && apt install -y liblzma-dev libbz2-dev
+RUN apt update && apt install -y liblzma-dev libbz2-dev cmake automake curl libboost-all-dev
 
 #########
 ### HTSlib tools: Samtools, Bcftools
@@ -52,11 +52,12 @@ WORKDIR /build
 #########
 ### Salmon
 #########
-WORKDIR build
-RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v0.8.2/Salmon-0.8.2_linux_x86_64.tar.gz && \
-    tar -xf Salmon-0.8.2_linux_x86_64.tar.gz && \
-    cp Salmon-0.8.2_linux_x86_64/bin/salmon /usr/local/bin && \
-    cp Salmon-0.8.2_linux_x86_64/lib/* /usr/local/lib/.
+WORKDIR /build
+RUN wget https://github.com/COMBINE-lab/salmon/archive/v0.8.2.tar.gz && \
+    tar -xf v0.8.2.tar.gz && \
+    cd /build/salmon-0.8.2 && mkdir build && cd build && \
+    cmake .. && make -j 4 && make install && cp ../lib/lib* /usr/local/lib/. && \
+    cp ../bin/salmon /usr/local/bin/.
 
 #########
 ### Pip installs: HTSeq
