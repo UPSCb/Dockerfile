@@ -66,6 +66,15 @@ RUN wget https://github.com/COMBINE-lab/salmon/archive/v0.8.2.tar.gz && \
 RUN pip install htseq
 
 #########
+### bedtools // TODO: Move to ngs-preprocessing after course
+#########
+WORKDIR /build
+RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz && \
+    tar -xf bedtools-2.26.0.tar.gz && cd bedtools2 && \
+    make -j 4 && make install
+
+
+#########
 ### Clean up
 #########
 WORKDIR /
