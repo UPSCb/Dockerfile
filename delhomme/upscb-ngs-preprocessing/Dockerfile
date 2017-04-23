@@ -4,9 +4,8 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update
-RUN	apt-get install -y default-jre wget git ftp nano python2.7-dev python-pip openssl openssh-server \
-	libopenmpi-dev openmpi-bin openmpi-common
+RUN apt-get update && apt-get install -y default-jre wget git ftp nano python2.7-dev python-pip openssl openssh-server \
+	libcairo2-dev libpango1.0-dev
 
 #########
 ### Working dir
@@ -39,17 +38,26 @@ RUN cp indexdb_rna /usr/local/bin && \
   cp scripts/merge-paired-reads.sh /usr/local/bin && cp scripts/unmerge-paired-reads.sh /usr/local/bin && \
 	cp -r rRNA_databases/ /usr/share/
 WORKDIR /usr/share/rRNA_databases
+ADD scripts/phiX.fasta /usr/share/rRNA_databases/phiX.fasta
 COPY scripts/indexdb.sh /usr/share/rRNA_databases/
 COPY scripts/makeDbList.sh /usr/share/rRNA_databases/
 RUN ./indexdb.sh
-ENV SORTMERNA_DB="/usr/share/rRNA_databases/rfam-5s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5s-database-id98:/usr/share/rRNA_databases/silva-euk-28s-id98.fasta,/usr/share/rRNA_databases/index/silva-euk-28s-id98:/usr/share/rRNA_databases/silva-euk-18s-id95.fasta,/usr/share/rRNA_databases/index/silva-euk-18s-id95:/usr/share/rRNA_databases/silva-arc-16s-id95.fasta,/usr/share/rRNA_databases/index/silva-arc-16s-id95:/usr/share/rRNA_databases/silva-bac-16s-id90.fasta,/usr/share/rRNA_databases/index/silva-bac-16s-id90:/usr/share/rRNA_databases/silva-arc-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-arc-23s-id98:/usr/share/rRNA_databases/silva-bac-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-bac-23s-id98:/usr/share/rRNA_databases/rfam-5.8s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5.8s-database-id98"
+ENV SORTMERNA_DB="/usr/share/rRNA_databases/rfam-5s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5s-database-id98:/usr/share/rRNA_databases/silva-euk-28s-id98.fasta,/usr/share/rRNA_databases/index/silva-euk-28s-id98:/usr/share/rRNA_databases/silva-euk-18s-id95.fasta,/usr/share/rRNA_databases/index/silva-euk-18s-id95:/usr/share/rRNA_databases/silva-arc-16s-id95.fasta,/usr/share/rRNA_databases/index/silva-arc-16s-id95:/usr/share/rRNA_databases/silva-bac-16s-id90.fasta,/usr/share/rRNA_databases/index/silva-bac-16s-id90:/usr/share/rRNA_databases/silva-arc-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-arc-23s-id98:/usr/share/rRNA_databases/silva-bac-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-bac-23s-id98:/usr/share/rRNA_databases/rfam-5.8s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5.8s-database-id98:/usr/share/rRNA_databases/phiX.fasta,/usr/share/rRNA_databases/index/phiX"
 RUN echo "export SORTMERNA_DB=$SORTMERNA_DB" >> /home/training/.profile
 WORKDIR /build
 
 #########
 ### Pip installs: multiQC
 #########
-RUN pip install multiqc
+WORKDIR /build
+RUN git clone https://github.com/ewels/MultiQC && cd MultiQC && \
+    pip install numpy matplotlib && \
+    python setup.py install
+
+WORKDIR /build
+RUN wget http://genometools.org/pub/genometools-1.5.9.tar.gz && \
+    tar -xf genometools-1.5.9.tar.gz && cd genometools-1.5.9 && \
+    make && make install
 
 #########
 ### GateOne SSH interface
