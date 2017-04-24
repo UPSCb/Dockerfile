@@ -1,10 +1,10 @@
 FROM delhomme/upscb-ngs-preprocessing
 MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
-	
+
 #########
 ### Working dir
 #########
-RUN	mkdir build 
+RUN	mkdir build
 WORKDIR /build
 
 #########
@@ -73,6 +73,13 @@ RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2
     tar -xf bedtools-2.26.0.tar.gz && cd bedtools2 && \
     make -j 4 && make install
 
+#########
+### gffread
+#########
+WORKDIR /build
+RUN git clone https://github.com/gpertea/gclib && \
+    git clone https://github.com/gpertea/gffread && \
+    cd gffread && make && cp gffread /usr/local/bin
 
 #########
 ### Clean up
