@@ -5,12 +5,14 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 ### Aptitude packages
 #########
 RUN apt-get update
-RUN	apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev locales
+RUN	apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev locales supervisor
 
 #########
 ### Squash locale warnings
 #########
-RUN locale-gen en_US.UTF-8
+RUN rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
 
 #########
 ### Working dir
@@ -55,5 +57,4 @@ RUN rm -rf build
 ### supervisord
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN apt-get install -y supervisor
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

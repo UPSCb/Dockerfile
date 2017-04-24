@@ -8,7 +8,8 @@ RUN apt-get update
 RUN	apt install -y libncurses-dev libbz2-dev \
 	liblzma-dev libpcre3-dev libxml2-dev libblas-dev gfortran git unzip ftp libzmq3-dev \
 	nano ftp fort77 libreadline-dev libcurl4-openssl-dev libx11-dev libxt-dev x11-common \
-	libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config
+	libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config texlive-latex-base \
+	texinfo texlive-fonts-extra default-jdk
 	
 #########
 ### Working dir
@@ -17,10 +18,10 @@ RUN	mkdir build
 WORKDIR /build
 
 #########
-### R version 3.3.1
+### R version 3.3.3
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.1.tar.gz && \
-    tar -zxf R-3.3.1.tar.gz && cd R-3.3.1 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.3.tar.gz && \
+    tar -zxf R-3.3.3.tar.gz && cd R-3.3.3 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
     make && make check && make pdf && make info && make install && make install-info && make install-pdf
@@ -28,19 +29,19 @@ RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.1.tar.gz && \
 #########
 ### HTSlib tools: Samtools, Bcftools
 #########
-RUN wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 \
-	https://github.com/samtools/bcftools/releases/download/1.3.1/bcftools-1.3.1.tar.bz2 \
-	https://github.com/samtools/htslib/releases/download/1.3.1/htslib-1.3.1.tar.bz2 && \
-	tar -xf htslib-1.3.1.tar.bz2
-WORKDIR htslib-1.3.1
+RUN wget https://github.com/samtools/samtools/releases/download/1.4/samtools-1.4.tar.bz2 \
+	https://github.com/samtools/bcftools/releases/download/1.4/bcftools-1.4.tar.bz2 \
+	https://github.com/samtools/htslib/releases/download/1.4/htslib-1.4.tar.bz2 && \
+	tar -xf htslib-1.4.tar.bz2
+WORKDIR htslib-1.4
 RUN ./configure && make && make install
 WORKDIR /build
-RUN tar -xf bcftools-1.3.1.tar.bz2
-WORKDIR bcftools-1.3.1
+RUN tar -xf bcftools-1.4.tar.bz2
+WORKDIR bcftools-1.4
 RUN make && make install
 WORKDIR /build
-RUN tar -xf samtools-1.3.1.tar.bz2
-WORKDIR samtools-1.3.1
+RUN tar -xf samtools-1.4.tar.bz2
+WORKDIR samtools-1.4
 RUN make && make install
 WORKDIR /build
 
