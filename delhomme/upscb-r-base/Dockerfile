@@ -25,10 +25,10 @@ RUN rm -rf /var/lib/apt/lists/* \
 ENV LANG en_US.utf8
 
 #########
-### R version 3.3.3
+### R version 3.4.0
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.3.tar.gz && \
-    tar -zxf R-3.3.3.tar.gz && cd R-3.3.3 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.0.tar.gz && \
+    tar -zxf R-3.4.0.tar.gz && cd R-3.4.0 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
     make && make pdf && make info && make install && make install-info && make install-pdf
@@ -55,6 +55,13 @@ RUN mkdir /home/training/.r-library && \
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+#########
+### Volumes
+#########
 RUN mkdir /home/training/share
 VOLUME /home/training/share
+
+#########
+### CMD
+#########
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

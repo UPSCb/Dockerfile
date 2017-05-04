@@ -18,13 +18,22 @@ RUN	mkdir build
 WORKDIR /build
 
 #########
-### R version 3.3.3
+### R version 3.4.0
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.3.3.tar.gz && \
-    tar -zxf R-3.3.3.tar.gz && cd R-3.3.3 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.0.tar.gz && \
+    tar -zxf R-3.4.0.tar.gz && cd R-3.4.0 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
-    make && make check && make pdf && make info && make install && make install-info && make install-pdf
+	  make && make pdf && make info && make install && make install-info && make install-pdf
+    ## make && make check && make pdf && make info && make install && make install-info && make install-pdf
+
+#########
+# R packages
+#########
+WORKDIR /home/training
+ADD R-package-list.txt /home/training/R-package-list.txt
+ADD R-install-packages.R /home/training/R-install-packages.R
+RUN Rscript R-install-packages.R
 
 #########
 ### HTSlib tools: Samtools, Bcftools
@@ -81,6 +90,8 @@ RUN mkdir /data && \
 #########
 ### Clean up
 #########
+WORKDIR /home/training
+RUN rm -rf R-package-list.txt R-install-packages.R
 WORKDIR /
 RUN rm -rf /build
 

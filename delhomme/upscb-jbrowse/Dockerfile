@@ -57,4 +57,5 @@ RUN rm -rf build
 ### supervisord
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+VOLUME /var/www/html/JBrowse-1.12.1/data
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
