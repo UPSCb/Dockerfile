@@ -2,11 +2,16 @@ FROM delhomme/upscb-jbrowse
 MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 
 #########
+### tmux med group
+#########
+#RUN groupadd -g 110 med && usermod -a -G med training
+
+#########
 ### Aptitude packages
 #########
-RUN apt update && apt install -y bzip2 wget git python2.7-dev python-pip \
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y bzip2 wget git python2.7-dev python-pip \
     openssl openssh-server libglib2.0-0 libsm6 libxrender1 libfontconfig1 \
-    ea-utils
+    med-config ea-utils nano screen tmux
 
 #########
 ### Anaconda
@@ -24,7 +29,7 @@ RUN su -l training -c '/home/training/anaconda2/bin/conda create -y -n lint pyth
 #########
 RUN su -l training -c '/home/training/anaconda2/bin/conda create -n qiime1 python=2.7 qiime \
 matplotlib=1.4.3 mock nose -c bioconda'
-    
+
 #########
 ### GateOne SSH interface
 #########
@@ -32,7 +37,7 @@ RUN pip install tornado==4.4.3
 RUN git clone https://github.com/liftoff/GateOne/ && \
     cd GateOne && python setup.py install && \
     python run_gateone.py --configure && cd ..
-    
+
 #########
 ### Clean up
 #########

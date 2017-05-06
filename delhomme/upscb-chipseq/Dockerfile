@@ -38,6 +38,7 @@ RUN Rscript R-install-packages.R
 #########
 ### HTSlib tools: Samtools, Bcftools
 #########
+WORKDIR /build
 RUN wget https://github.com/samtools/samtools/releases/download/1.4/samtools-1.4.tar.bz2 \
 	https://github.com/samtools/bcftools/releases/download/1.4/bcftools-1.4.tar.bz2 \
 	https://github.com/samtools/htslib/releases/download/1.4/htslib-1.4.tar.bz2 && \

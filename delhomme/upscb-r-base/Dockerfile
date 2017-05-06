@@ -41,16 +41,6 @@ WORKDIR /
 RUN rm -rf build
 
 #########
-### R installs
-#########
-ENV R_LIBS="/home/training/.r-library"
-ADD .Renviron /home/training/.Renviron
-RUN mkdir /home/training/.r-library && \
-    chown -R training:training /home/training/.Renviron && \
-    chown -R training:training /home/training/.r-library && \
-    chmod 755 /home/training/.r-library
-
-#########
 ### supervisord
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
