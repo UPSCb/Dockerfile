@@ -19,9 +19,9 @@ RUN Rscript R-install-packages.R
 # R local packages
 #########
 RUN	mkdir /build
-WORKDIR /build 
-RUN curl ftp://130.239.72.87/Facility/Workshop/RnaSeqTutorial_0.99.6.tar.gz > RnaSeqTutorial_0.99.6.tar.gz
-RUN R CMD INSTALL RnaSeqTutorial_0.99.6.tar.gz
+WORKDIR /build
+RUN curl ftp://130.239.72.87/Facility/Workshop/RnaSeqTutorial_0.99.7.tar.gz > RnaSeqTutorial_0.99.7.tar.gz
+RUN R CMD INSTALL RnaSeqTutorial_0.99.7.tar.gz
 
 ########
 # GitHub package

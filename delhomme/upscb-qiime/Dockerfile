@@ -39,6 +39,18 @@ RUN git clone https://github.com/liftoff/GateOne/ && \
     python run_gateone.py --configure && cd ..
 
 #########
+### Screed
+#########
+RUN pip install screed
+
+#########
+### Blast
+#########
+RUN curl -O ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
+	tar xvf ncbi-blast-2.6.0+-x64-linux.tar.gz && \
+	cp ncbi-blast-2.6.0+/bin/* /usr/local/bin/
+
+#########
 ### Clean up
 #########
 WORKDIR /
