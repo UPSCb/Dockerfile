@@ -57,6 +57,11 @@ WORKDIR /
 RUN rm -rf /build /home/training/build
 
 #########
+# Apache access to the home dir
+#########
+RUN ln -sf /home/training /var/www/html/home
+
+#########
 ### Supervisor
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
