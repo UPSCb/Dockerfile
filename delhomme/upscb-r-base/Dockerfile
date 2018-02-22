@@ -10,7 +10,7 @@ RUN echo "alias ll='ls -la -G'" >> /home/training/.profile
 #########
 RUN     apt-get update
 RUN	apt-get install -y \
-	build-essential wget libghc-zlib-dev libncurses-dev libbz2-dev liblzma-dev libpcre3-dev libxml2-dev locales \
+	build-essential wget libghc-zlib-dev libncurses-dev libpcre3-dev libxml2-dev locales \
 	libblas-dev gfortran git unzip ftp libzmq3-dev nano ftp fort77 libreadline-dev libcurl4-openssl-dev default-jdk \
 	libx11-dev libxt-dev x11-common libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config texlive-latex-base \
 	texinfo texlive-fonts-extra zip supervisor && \
@@ -25,10 +25,10 @@ RUN rm -rf /var/lib/apt/lists/* \
 ENV LANG en_US.utf8
 
 #########
-### R version 3.4.0
+### R version 3.4.3
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.0.tar.gz && \
-    tar -zxf R-3.4.0.tar.gz && cd R-3.4.0 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.3.tar.gz && \
+    tar -zxf R-3.4.3.tar.gz && cd R-3.4.3 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
     make && make pdf && make info && make install && make install-info && make install-pdf

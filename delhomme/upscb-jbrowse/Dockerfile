@@ -39,13 +39,14 @@ RUN cpan App::cpanminus && cpanm PerlIO::gzip
 #########
 RUN rm -f /var/www/html/index.html
 WORKDIR /var/www/html
-RUN curl -O http://jbrowse.org/releases/JBrowse-1.12.1.zip && \
-    unzip JBrowse-1.12.1.zip
-WORKDIR /var/www/html/JBrowse-1.12.1
+# -L is needed as GitHub redirects to AWS S3
+RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.12.4-release/JBrowse-1.12.4.zip && \
+    unzip JBrowse-1.12.4.zip
+WORKDIR /var/www/html/JBrowse-1.12.4
 RUN ./setup.sh && \
     chown -R www-data:www-data /var/www/html
 WORKDIR /
-RUN rm /var/www/html/JBrowse-1.12.1.zip
+RUN rm /var/www/html/JBrowse-1.12.4.zip
 
 #########
 ### Cleanup
@@ -54,8 +55,13 @@ WORKDIR /
 RUN rm -rf build
 
 #########
+### accessibility
+#########
+VOLUME /var/www/html/JBrowse-1.12.4/data
+EXPOSE 80
+
+#########
 ### supervisord
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-VOLUME /var/www/html/JBrowse-1.12.1/data
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

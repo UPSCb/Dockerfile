@@ -5,8 +5,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 ### Aptitude packages
 #########
 RUN apt-get update
-RUN	apt install -y libncurses-dev libbz2-dev \
-	liblzma-dev libpcre3-dev libxml2-dev libblas-dev gfortran git unzip ftp libzmq3-dev \
+RUN	apt install -y libncurses-dev libpcre3-dev libxml2-dev libblas-dev gfortran git unzip libzmq3-dev \
 	nano ftp fort77 libreadline-dev libcurl4-openssl-dev libx11-dev libxt-dev x11-common \
 	libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config texlive-latex-base \
 	texinfo texlive-fonts-extra default-jdk
@@ -18,10 +17,10 @@ RUN	mkdir build
 WORKDIR /build
 
 #########
-### R version 3.4.0
+### R version 3.4.3
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.0.tar.gz && \
-    tar -zxf R-3.4.0.tar.gz && cd R-3.4.0 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.3.tar.gz && \
+    tar -zxf R-3.4.3.tar.gz && cd R-3.4.3 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
 	  make && make pdf && make info && make install && make install-info && make install-pdf
@@ -36,38 +35,11 @@ ADD R-install-packages.R /home/training/R-install-packages.R
 RUN Rscript R-install-packages.R
 
 #########
-### HTSlib tools: Samtools, Bcftools
-#########
-WORKDIR /build
-RUN wget https://github.com/samtools/samtools/releases/download/1.4/samtools-1.4.tar.bz2 \
-	https://github.com/samtools/bcftools/releases/download/1.4/bcftools-1.4.tar.bz2 \
-	https://github.com/samtools/htslib/releases/download/1.4/htslib-1.4.tar.bz2 && \
-	tar -xf htslib-1.4.tar.bz2
-WORKDIR htslib-1.4
-RUN ./configure && make && make install
-WORKDIR /build
-RUN tar -xf bcftools-1.4.tar.bz2
-WORKDIR bcftools-1.4
-RUN make && make install
-WORKDIR /build
-RUN tar -xf samtools-1.4.tar.bz2
-WORKDIR samtools-1.4
-RUN make && make install
-WORKDIR /build
-
-#########
-### BEDtools
-#########
-RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz && \
-	tar -xf bedtools-2.26.0.tar.gz && cd bedtools2 && \
-	make && make install
-
-#########
 ### BWA
 #########
-RUN wget http://downloads.sourceforge.net/project/bio-bwa/bwa-0.7.15.tar.bz2 && \
-	tar -xf bwa-0.7.15.tar.bz2
-WORKDIR bwa-0.7.15
+RUN wget http://downloads.sourceforge.net/project/bio-bwa/bwa-0.7.17.tar.bz2 && \
+	tar -xf bwa-0.7.17.tar.bz2
+WORKDIR bwa-0.7.17
 RUN make && \
 	cp bwa /usr/local/bin/
 
@@ -82,8 +54,8 @@ WORKDIR /build
 ### USeq and Sissrs
 #########
 RUN mkdir /data && \
-    wget http://downloads.sourceforge.net/project/useq/USeq_8.9.6.zip && \
-    unzip USeq_8.9.6.zip && mv USeq_8.9.6 /usr/share/USeq && \
+    wget https://github.com/HuntsmanCancerInstitute/USeq/releases/download/USeq_9.1.3/USeq_9.1.3.zip && \
+    unzip USeq_9.1.3.zip && mv USeq_9.1.3 /usr/share/USeq && \
     wget http://dir.nhlbi.nih.gov/papers/lmi/epigenomes/sissrs/sissrs_v1.4.tar.gz && \
     tar -xf sissrs_v1.4.tar.gz && \
     cp sissrs.pl /usr/local/bin

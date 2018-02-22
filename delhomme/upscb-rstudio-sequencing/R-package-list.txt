@@ -1,4 +1,5 @@
 AnnotationDbi
+BASiCS
 BiocStyle
 BSgenome.Dmelanogaster.UCSC.dm3
 BSgenome.Hsapiens.UCSC.hg19
@@ -20,7 +21,6 @@ gplots
 knitr
 leeBamViews
 limma
-monocle
 LSD
 pheatmap
 RColorBrewer

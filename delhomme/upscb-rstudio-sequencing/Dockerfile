@@ -4,7 +4,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt install -y curl
+RUN apt-get update && apt install -y curl libssh2-1-dev libmariadb-client-lgpl-dev
 
 #########
 # R packages
@@ -24,9 +24,9 @@ RUN curl ftp://130.239.72.87/Facility/Workshop/RnaSeqTutorial_0.99.7.tar.gz > Rn
 RUN R CMD INSTALL RnaSeqTutorial_0.99.7.tar.gz
 
 ########
-# GitHub package
+# GitHub package - kept as a reminder.
 ########
-RUN Rscript -e 'devtools::install_github("catavallejos/BASiCS")'
+#RUN Rscript -e 'devtools::install_github("catavallejos/BASiCS")'
 
 #########
 ### Cleanup
