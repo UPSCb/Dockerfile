@@ -43,7 +43,7 @@ RUN wget https://github.com/broadinstitute/gatk/releases/download/4.0.1.2/gatk-4
 WORKDIR /build
 RUN wget https://github.com/broadinstitute/picard/releases/download/2.17.10/picard.jar && \
     cp picard.jar /tools && \
-    echo "alias picard='java -jar /tools/picard.jar'" >> /home/training/.bash_aliases
+    echo "alias picard='java -jar /tools/picard.jar'" >> /etc/profile.d/00-aliases.sh
 
 # freebayes
 RUN git clone --recursive git://github.com/ekg/freebayes.git && \
@@ -62,7 +62,7 @@ RUN wget https://bitbucket.org/kokonech/qualimap/downloads/qualimap_v2.2.1.zip &
 RUN wget http://s3.amazonaws.com/plink2-assets/alpha1/plink2_linux_avx2.zip && \
     unzip plink2_linux_avx2.zip && \
     cp plink2 /usr/local/bin && \
-    echo "alias plink=plink2" >> /home/training/.bash_aliases
+    echo "alias plink=plink2" >> /etc/profile.d/00-aliases.sh
 
 # GateOne
 RUN pip install --upgrade pip && pip install tornado==4.4.3 && \
