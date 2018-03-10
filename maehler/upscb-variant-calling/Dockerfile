@@ -15,6 +15,7 @@ RUN apt update && apt-get install -y \
     python-pip \
     openssh-server \
     openssl \
+    pkg-config \
     wget
 
 # BWA
@@ -64,11 +65,23 @@ RUN wget http://s3.amazonaws.com/plink2-assets/alpha1/plink2_linux_avx2.zip && \
     cp plink2 /usr/local/bin && \
     echo "alias plink=plink2" >> /etc/profile.d/00-aliases.sh
 
+# vcftools
+RUN wget https://github.com/vcftools/vcftools/releases/download/v0.1.15/vcftools-0.1.15.tar.gz && \
+    tar xzvf vcftools-0.1.15.tar.gz && \
+    cd vcftools-0.1.15 && \
+    ./configure && \
+    make && \
+    make install
+
 # GateOne
 RUN pip install --upgrade pip && pip install tornado==4.4.3 && \
     git clone https://github.com/liftoff/GateOne/ && \
     cd GateOne && python setup.py install && \
     python run_gateone.py --configure && cd ..
+
+# More aliasesa
+
+RUN echo "alias ll='ls -lh'" >> /etc/profile.d/00-aliases.sh
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 VOLUME /var/www/html/JBrowse-1.12.1/data
