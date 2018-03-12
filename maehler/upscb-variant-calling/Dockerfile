@@ -11,11 +11,13 @@ RUN apt update && apt-get install -y \
     libbz2-dev \
     liblzma-dev \
     man \
+    nano \
     python3-dev \
     python-pip \
     openssh-server \
     openssl \
     pkg-config \
+    vim \
     wget
 
 # BWA
@@ -80,8 +82,12 @@ RUN pip install --upgrade pip && pip install tornado==4.4.3 && \
     python run_gateone.py --configure && cd ..
 
 # More aliasesa
-
 RUN echo "alias ll='ls -lh'" >> /etc/profile.d/00-aliases.sh
+
+# JBrowse stuff
+RUN mkdir /var/www/html/JBrowse-1.12.4/datafiles && \
+    chown www-data:training /var/www/html/JBrowse-1.12.4/datafiles && \
+    chmod 775 /var/www/html/JBrowse-1.12.4/datafiles
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 VOLUME /var/www/html/JBrowse-1.12.1/data
