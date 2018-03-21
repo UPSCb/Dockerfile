@@ -32,8 +32,8 @@ RUN wget https://github.com/samtools/samtools/releases/download/1.7/samtools-1.7
     tar jxf samtools-1.7.tar.bz2 && \
     cd samtools-1.7 && \
     ./configure && \
-    make && \
-    make install
+    make all all-htslib && \
+    make install install-htslib
 
 # GATK
 RUN mkdir /tools
@@ -75,11 +75,28 @@ RUN wget https://github.com/vcftools/vcftools/releases/download/v0.1.15/vcftools
     make && \
     make install
 
+# vep
+WORKDIR /tools
+RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
+    cd ensembl-vep && \
+    cpanm Module::Build DBI Bio::Root::Version Bio::DB::HTS::Tabix && \
+    perl INSTALL.pl -a a --NO_TEST && \
+    ln -s /tools/ensembl-vep/vep /usr/local/bin/vep
+
 # GateOne
 RUN pip install --upgrade pip && pip install tornado==4.4.3 && \
     git clone https://github.com/liftoff/GateOne/ && \
     cd GateOne && python setup.py install && \
     python run_gateone.py --configure && cd ..
+
+# bcftools
+WORKDIR /build
+RUN wget https://github.com/samtools/bcftools/releases/download/1.7/bcftools-1.7.tar.bz2 && \
+    tar xjvf bcftools-1.7.tar.bz2 && \
+    cd bcftools-1.7 && \
+    ./configure && \
+    make && \
+    make install
 
 # More aliasesa
 RUN echo "alias ll='ls -lh'" >> /etc/profile.d/00-aliases.sh
@@ -87,10 +104,13 @@ RUN echo "alias ll='ls -lh'" >> /etc/profile.d/00-aliases.sh
 # JBrowse stuff
 RUN mkdir /var/www/html/JBrowse-1.12.4/datafiles && \
     chown www-data:training /var/www/html/JBrowse-1.12.4/datafiles && \
-    chmod 775 /var/www/html/JBrowse-1.12.4/datafiles
+    chmod 775 /var/www/html/JBrowse-1.12.4/datafiles && \
+    chown -R www-data:training /var/www/html/JBrowse-1.12.4/data
+
+RUN ln -s /home/training /var/www/html/home
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-VOLUME /var/www/html/JBrowse-1.12.1/data
+VOLUME /var/www/html/JBrowse-1.12.4/data
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 RUN mkdir /home/training/share
