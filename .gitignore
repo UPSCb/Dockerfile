@@ -2,3 +2,6 @@ ntop
 .DS_Store
 cmd.sh
 .Rproj.user
+*.Rproj
+*.tar.gz
+

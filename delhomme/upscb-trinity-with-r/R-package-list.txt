@@ -1,0 +1,7 @@
+DESeq2
+gplots
+ggplot2
+edgeR
+limma
+ctc
+ape
