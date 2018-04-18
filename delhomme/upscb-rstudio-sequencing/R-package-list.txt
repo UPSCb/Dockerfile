@@ -17,8 +17,9 @@ genomeIntervals
 GenomicAlignments
 GenomicFeatures
 Glimma
-Homo.sapiens
 gplots
+hexbin
+Homo.sapiens
 knitr
 leeBamViews
 limma

@@ -29,13 +29,14 @@ USER root
 #########
 ### Python modules
 #########
-RUN pip install cvxopt numpy biopython scipy
+RUN pip install --upgrade pip
+USER training
+RUN pip install --user cvxopt numpy biopython scipy
 
 #########
 ### Oyster River Protocol (ORP)
 #########
 WORKDIR /home/training
-USER training
 RUN git clone https://github.com/macmanes-lab/Oyster_River_Protocol.git
 RUN cd Oyster_River_Protocol && make
 RUN mkdir Oyster_River_Protocol/busco_dbs && cd $HOME/Oyster_River_Protocol/busco_dbs && \
@@ -62,6 +63,8 @@ ENV PATH=/home/training/miniconda/bin:${PATH}
 #########
 RUN conda update -n base conda && conda create -n dammit python=3
 RUN /bin/bash -c "source activate dammit && \
+    	pip install --upgrade pip && \
+    	pip install cvxopt numpy biopython scipy && \
 	conda config --add channels conda-forge && \
 	conda config --add channels bioconda"
 RUN /bin/bash -c "conda install -y dammit"
@@ -75,6 +78,8 @@ RUN /bin/bash -c "source activate dammit && \
 	dammit databases --install --busco-group fungi"
 ADD config.ini /home/training/Oyster_River_Protocol/software/config.ini
 USER root
+RUN chown training:training /home/training/Oyster_River_Protocol/software/busco/config/config.ini
+RUN chown training:training /home/training/Oyster_River_Protocol/software/config.ini
 
 #########
 ### Clean up
