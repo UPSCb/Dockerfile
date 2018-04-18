@@ -1,48 +1,40 @@
-FROM ubuntu
-MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
+FROM fedora
+MAINTAINER Bastian Schiffthaler (b.schiffthaler@gmail.com)
+#########
+### Install deps
+#########
+RUN dnf update -y && \
+  dnf install -y gcc cmake boost-devel cpprest-devel git gcc-c++ openssl-devel \
+                 tclap
 
 #########
-### Aptitude packages
-#########
-RUN apt-get update
-RUN apt install -y --fix-missing build-essential g++ git make zlib1g-dev libboost-all-dev libssl-dev cmake
-
-#########
-### clone the cpprest repos
-#########
-WORKDIR /build
-RUN git clone https://github.com/Microsoft/cpprestsdk.git casablanca
-RUN cd casablanca/Release && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release && make && make install
-
-#########
-### update cmake
-#########
-WORKDIR /build
-RUN apt install wget && wget https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz && tar -zxf cmake-3.11.1.tar.gz && \
-cd cmake-3.11.1 && cmake . && make && make install
-
-#########
-### clone the repo
+### Clone repo
 #########
 WORKDIR /build
 RUN git clone https://autodocker:autodocker@microasp.upsc.se/bastian/gopher2.git
-RUN cd gopher2/build && rm -rf * && cmake -DBOOST_ROOT=/usr/lib/x86_64-linux-gnu .. && make && cp gopher2 /usr/local/bin
+WORKDIR /build/gopher2/build
+
 
 #########
-### cleanup
+### Build Gopher2 source
+#########
+RUN rm -rf * && \
+  cmake .. && \
+  make && \
+  cp gopher2 /usr/local/bin
+
+
+#########
+### Cleanup
 #########
 WORKDIR /
 RUN rm -rf /build
+
+WORKDIR /run
+VOLUME /run
 
 #########
 ### PORT and CMD
 #########
 EXPOSE 5432
-
-# For the course to be able to update the nodejs webpage daily
-# RUN apt install -y supervisor
-# ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-# CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
-CMD ["gopher2","/usr/local/bin"]
-
-
+CMD ["gopher2","/run/conf.json"]
