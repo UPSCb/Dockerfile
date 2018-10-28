@@ -1,5 +1,8 @@
 rlib='/home/training/.r-library'
 
-source("http://bioconductor.org/biocLite.R")
-biocLite(scan(what="character","R-package-list.txt"),ask = FALSE)
-biocValid(fix=TRUE,ask=FALSE)
+install.packages("BiocManager",repos="https://ftp.acc.umu.se/mirror/CRAN/")
+BiocManager::install(
+	pkgs=scan(what="character","R-package-list.txt"),
+	ask = FALSE,
+	update=TRUE,
+	Ncpus=8)

@@ -5,26 +5,26 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 ### Aptitude packages
 #########
 RUN apt-get update && apt-get install -y default-jre wget git ftp nano python2.7-dev python-pip openssl openssh-server \
-	libcairo2-dev libpango1.0-dev liblzma-dev libbz2-dev 
+	libcairo2-dev libpango1.0-dev liblzma-dev libbz2-dev
 
 #########
 ### Working dir
 #########
-RUN	mkdir build 
+RUN	mkdir build
 WORKDIR /build
 
 #########
 ### Java tools: Trimmomatic, FastQC
 #########
-RUN wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.7.zip && \
-	unzip fastqc_v0.11.7.zip && \
+RUN wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8.zip && \
+	unzip fastqc_v0.11.8.zip && \
 	chmod +x FastQC/fastqc && \
 	cp -r FastQC /usr/share/ && \
 	ln -s /usr/share/FastQC/fastqc /usr/bin/ && \
-	wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip && \
-	unzip Trimmomatic-0.36.zip && \
-	cp -r Trimmomatic-0.36 /usr/share/ && \
-	echo '#!/bin/bash\njava -jar /usr/share/Trimmomatic-0.36/trimmomatic-0.36.jar $@' > /usr/bin/trimmomatic && \
+	wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.38.zip && \
+	unzip Trimmomatic-0.38.zip && \
+	cp -r Trimmomatic-0.38 /usr/share/ && \
+	echo '#!/bin/bash\njava -jar /usr/share/Trimmomatic-0.38/trimmomatic-0.38.jar $@' > /usr/bin/trimmomatic && \
 	chmod +x /usr/bin/trimmomatic
 
 #########
@@ -61,19 +61,19 @@ RUN wget http://genometools.org/pub/genometools-1.5.10.tar.gz && \
 ### HTSlib tools: Samtools, Bcftools
 #########
 WORKDIR /build
-RUN wget https://github.com/samtools/samtools/releases/download/1.7/samtools-1.7.tar.bz2 \
-	https://github.com/samtools/bcftools/releases/download/1.7/bcftools-1.7.tar.bz2 \
-	https://github.com/samtools/htslib/releases/download/1.7/htslib-1.7.tar.bz2 && \
-	tar -xf htslib-1.7.tar.bz2
-WORKDIR htslib-1.7
+RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 \
+	https://github.com/samtools/bcftools/releases/download/1.9/bcftools-1.9.tar.bz2 \
+	https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar.bz2 && \
+	tar -xf htslib-1.9.tar.bz2
+WORKDIR htslib-1.9
 RUN ./configure && make && make install
 WORKDIR /build
-RUN tar -xf bcftools-1.7.tar.bz2
-WORKDIR bcftools-1.7
+RUN tar -xf bcftools-1.9.tar.bz2
+WORKDIR bcftools-1.9
 RUN make && make install
 WORKDIR /build
-RUN tar -xf samtools-1.7.tar.bz2
-WORKDIR samtools-1.7
+RUN tar -xf samtools-1.9.tar.bz2
+WORKDIR samtools-1.9
 RUN make && make install
 WORKDIR /build
 

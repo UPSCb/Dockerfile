@@ -9,11 +9,14 @@ RUN echo "alias ll='ls -la -G'" >> /home/training/.profile
 ### Aptitude packages
 #########
 RUN     apt-get update
-RUN	apt-get install -y --fix-missing \
-	build-essential wget libghc-zlib-dev libncurses-dev libpcre3-dev libxml2-dev locales libbz2-dev liblzma-dev \
+RUN	apt-get install -y --fix-missing build-essential wget
+# && \
+RUN	DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
+#&& \
+RUN	apt-get install -y --fix-missing libghc-zlib-dev libncurses-dev libpcre3-dev libxml2-dev locales libbz2-dev liblzma-dev \
 	libblas-dev gfortran git unzip ftp libzmq3-dev nano ftp fort77 libreadline-dev libcurl4-openssl-dev default-jdk \
-	libx11-dev libxt-dev x11-common libcairo2-dev libpng12-dev libreadline6-dev libjpeg8-dev pkg-config texlive-latex-base \
-	texinfo texlive-fonts-extra zip supervisor tcl-dev tk-dev && \
+	libx11-dev libxt-dev x11-common libcairo2-dev libpng-dev libreadline6-dev libjpeg8-dev pkg-config texlive-latex-base \
+	texinfo texlive-fonts-extra zip supervisor tcl-dev tk-dev pandoc pandoc-citeproc && \
 	mkdir build
 WORKDIR /build
 
@@ -25,14 +28,14 @@ RUN rm -rf /var/lib/apt/lists/* \
 ENV LANG en_US.utf8
 
 #########
-### R version 3.4.3
+### R version 3.5.1
 #########
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.4.3.tar.gz && \
-    tar -zxf R-3.4.3.tar.gz && cd R-3.4.3 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.5.1.tar.gz && \
+    tar -zxf R-3.5.1.tar.gz && cd R-3.5.1 && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack --with-tcltk \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib --with-x=no && \
-    make && make pdf && make info && make install && make install-info && make install-pdf
-    ## make && make check && make pdf && make info && make install && make install-info && make install-pdf
+##    make && make pdf && make info && make install && make install-info && make install-pdf
+     make -j 16 && make check && make pdf && make info && make install && make install-info && make install-pdf
 
 #########
 ### Cleanup

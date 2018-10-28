@@ -12,8 +12,8 @@ WORKDIR /build
 #########
 ### Rstudio
 #########
-RUN wget https://download2.rstudio.org/rstudio-server-1.1.423-amd64.deb && \
-    gdebi -n rstudio-server-1.1.423-amd64.deb
+RUN wget https://download2.rstudio.org/rstudio-server-1.1.456-amd64.deb && \
+    gdebi -n rstudio-server-1.1.456-amd64.deb
 
 #########
 ### Cleanup

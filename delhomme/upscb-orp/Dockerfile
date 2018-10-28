@@ -66,7 +66,8 @@ RUN /bin/bash -c "source activate dammit && \
     	pip install --upgrade pip && \
     	pip install cvxopt numpy biopython scipy && \
 	conda config --add channels conda-forge && \
-	conda config --add channels bioconda"
+	conda config --add channels bioconda && \
+	conda install -y busco perl-uri perl-db-file"
 RUN /bin/bash -c "conda install -y dammit"
 # || conda install -y dammit"
 

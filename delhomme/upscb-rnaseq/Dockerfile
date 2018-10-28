@@ -15,9 +15,9 @@ RUN apt update && apt install -y cmake automake curl libboost-all-dev
 #########
 ### STAR
 #########
-RUN wget https://github.com/alexdobin/STAR/archive/2.5.4b.tar.gz && \
-	tar -xf 2.5.4b.tar.gz
-WORKDIR STAR-2.5.4b/bin/Linux_x86_64_static
+RUN wget https://github.com/alexdobin/STAR/archive/2.6.1c.tar.gz && \
+	tar -xf 2.6.1c.tar.gz
+WORKDIR STAR-2.6.1c/bin/Linux_x86_64_static
 RUN cp STAR /usr/local/bin
 WORKDIR /build
 
@@ -34,9 +34,9 @@ WORKDIR /build
 ### Salmon
 #########
 WORKDIR /build
-RUN wget https://github.com/COMBINE-lab/salmon/archive/v0.9.1.tar.gz && \
-    tar -xf v0.9.1.tar.gz && \
-    cd /build/salmon-0.9.1 && mkdir build && cd build && \
+RUN wget https://github.com/COMBINE-lab/salmon/archive/v0.11.3.tar.gz && \
+    tar -xf v0.11.3.tar.gz && \
+    cd /build/salmon-0.11.3 && mkdir build && cd build && \
     cmake .. && make -j 4 && make install && cp ../lib/lib* /usr/local/lib/. && \
     cp ../bin/salmon /usr/local/bin/.
 

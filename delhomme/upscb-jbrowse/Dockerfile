@@ -17,7 +17,7 @@ ENV LANG en_US.utf8
 #########
 ### Working dir
 #########
-RUN	mkdir build 
+RUN	mkdir build
 WORKDIR /build
 
 #########
@@ -40,13 +40,13 @@ RUN cpan App::cpanminus && cpanm PerlIO::gzip
 RUN rm -f /var/www/html/index.html
 WORKDIR /var/www/html
 # -L is needed as GitHub redirects to AWS S3
-RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.15.3-release/JBrowse-1.15.3.zip && \
-    unzip JBrowse-1.15.3.zip
-WORKDIR /var/www/html/JBrowse-1.15.3
+RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.15.4-release/JBrowse-1.15.4.zip && \
+    unzip JBrowse-1.15.4.zip
+WORKDIR /var/www/html/JBrowse-1.15.4
 RUN ./setup.sh && \
     chown -R www-data:www-data /var/www/html
 WORKDIR /
-RUN rm /var/www/html/JBrowse-1.15.3.zip
+RUN rm /var/www/html/JBrowse-1.15.4.zip
 
 #########
 ### Cleanup
@@ -57,7 +57,7 @@ RUN rm -rf build
 #########
 ### accessibility
 #########
-VOLUME /var/www/html/JBrowse-1.15.3/data
+VOLUME /var/www/html/JBrowse-1.15.4/data
 EXPOSE 80
 
 #########
