@@ -4,8 +4,9 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt-get install -y default-jre wget git ftp nano python2.7-dev python-pip openssl openssh-server \
-	libcairo2-dev libpango1.0-dev liblzma-dev libbz2-dev
+RUN apt-get update && apt-get install -y cmake default-jre git ftp libbz2-dev \
+	libcairo2-dev libpango1.0-dev liblzma-dev librocksdb-dev nano openssl \
+	openssh-server python2.7-dev python-pip python3-dev python3-pip rapidjson-dev wget zlib1g-dev
 
 #########
 ### Working dir
@@ -30,29 +31,34 @@ RUN wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8
 #########
 ### SortmeRNA
 #########
-RUN wget https://github.com/biocore/sortmerna/archive/2.1b.tar.gz && \
-    tar -xf 2.1b.tar.gz
-WORKDIR sortmerna-2.1b
-RUN ./configure && make && make install || true
-RUN cp indexdb_rna /usr/local/bin && \
-  cp scripts/merge-paired-reads.sh /usr/local/bin && cp scripts/unmerge-paired-reads.sh /usr/local/bin && \
+# Building from source is annoying so we fetch the release binaries
+RUN wget https://github.com/biocore/sortmerna/releases/download/v3.0.3/sortmerna-3.0.3-Linux_U18.tar.gz && \
+     tar -zxf sortmerna-3.0.3-Linux_U18.tar.gz && cp sortmerna-3.0.3-Linux/bin/* /usr/local/bin
+# However we also clone the repos to get the rRNA-dbs and other scripts
+RUN git clone https://github.com/biocore/sortmerna.git
+WORKDIR sortmerna
+RUN cp scripts/merge-paired-reads.sh /usr/local/bin && cp scripts/unmerge-paired-reads.sh /usr/local/bin && \
 	cp -r rRNA_databases/ /usr/share/
 WORKDIR /usr/share/rRNA_databases
 ADD scripts/phiX.fasta /usr/share/rRNA_databases/phiX.fasta
 COPY scripts/indexdb.sh /usr/share/rRNA_databases/
 COPY scripts/makeDbList.sh /usr/share/rRNA_databases/
 RUN ./indexdb.sh
-ENV SORTMERNA_DB="/usr/share/rRNA_databases/rfam-5s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5s-database-id98:/usr/share/rRNA_databases/silva-euk-28s-id98.fasta,/usr/share/rRNA_databases/index/silva-euk-28s-id98:/usr/share/rRNA_databases/silva-euk-18s-id95.fasta,/usr/share/rRNA_databases/index/silva-euk-18s-id95:/usr/share/rRNA_databases/silva-arc-16s-id95.fasta,/usr/share/rRNA_databases/index/silva-arc-16s-id95:/usr/share/rRNA_databases/silva-bac-16s-id90.fasta,/usr/share/rRNA_databases/index/silva-bac-16s-id90:/usr/share/rRNA_databases/silva-arc-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-arc-23s-id98:/usr/share/rRNA_databases/silva-bac-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-bac-23s-id98:/usr/share/rRNA_databases/rfam-5.8s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5.8s-database-id98:/usr/share/rRNA_databases/phiX.fasta,/usr/share/rRNA_databases/index/phiX"
-RUN echo "export SORTMERNA_DB=$SORTMERNA_DB" >> /home/training/.profile
+#ENV SORTMERNA_DB=$(makeDbList.sh)
+#"/usr/share/rRNA_databases/rfam-5s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5s-database-id98:/usr/share/rRNA_databases/silva-euk-28s-id98.fasta,/usr/share/rRNA_databases/index/silva-euk-28s-id98:/usr/share/rRNA_databases/silva-euk-18s-id95.fasta,/usr/share/rRNA_databases/index/silva-euk-18s-id95:/usr/share/rRNA_databases/silva-arc-16s-id95.fasta,/usr/share/rRNA_databases/index/silva-arc-16s-id95:/usr/share/rRNA_databases/silva-bac-16s-id90.fasta,/usr/share/rRNA_databases/index/silva-bac-16s-id90:/usr/share/rRNA_databases/silva-arc-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-arc-23s-id98:/usr/share/rRNA_databases/silva-bac-23s-id98.fasta,/usr/share/rRNA_databases/index/silva-bac-23s-id98:/usr/share/rRNA_databases/rfam-5.8s-database-id98.fasta,/usr/share/rRNA_databases/index/rfam-5.8s-database-id98:/usr/share/rRNA_databases/phiX.fasta,/usr/share/rRNA_databases/index/phiX"
+RUN echo "export SORTMERNA_DB=$(/usr/share/rRNA_databases/makeDbList.sh)" >> /home/training/.profile
 WORKDIR /build
 
 #########
 ### Pip installs: multiQC
 #########
 RUN git clone https://github.com/ewels/MultiQC && cd MultiQC && \
-    pip install numpy matplotlib && \
-    python setup.py install
+    pip3 install numpy matplotlib && \
+    python3 setup.py install
 
+#########
+### genometools
+#########
 RUN wget http://genometools.org/pub/genometools-1.5.10.tar.gz && \
     tar -xf genometools-1.5.10.tar.gz && cd genometools-1.5.10 && \
     make && make install

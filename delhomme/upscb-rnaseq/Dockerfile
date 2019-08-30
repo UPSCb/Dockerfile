@@ -15,18 +15,18 @@ RUN apt update && apt install -y cmake automake curl libboost-all-dev
 #########
 ### STAR
 #########
-RUN wget https://github.com/alexdobin/STAR/archive/2.6.1c.tar.gz && \
-	tar -xf 2.6.1c.tar.gz
-WORKDIR STAR-2.6.1c/bin/Linux_x86_64_static
+RUN wget https://github.com/alexdobin/STAR/archive/2.7.0e.tar.gz && \
+	tar -xf 2.7.0e.tar.gz
+WORKDIR STAR-2.7.0e/bin/Linux_x86_64_static
 RUN cp STAR /usr/local/bin
 WORKDIR /build
 
 #########
 ### kallisto
 #########
-RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.44.0/kallisto_linux-v0.44.0.tar.gz && \
-	tar -xf kallisto_linux-v0.44.0.tar.gz
-WORKDIR kallisto_linux-v0.44.0
+RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.45.1/kallisto_linux-v0.45.1.tar.gz && \
+	tar -xf kallisto_linux-v0.45.1.tar.gz
+WORKDIR kallisto_linux-v0.45.1
 RUN cp kallisto /usr/local/bin
 WORKDIR /build
 
@@ -34,9 +34,8 @@ WORKDIR /build
 ### Salmon
 #########
 WORKDIR /build
-RUN wget https://github.com/COMBINE-lab/salmon/archive/v0.11.3.tar.gz && \
-    tar -xf v0.11.3.tar.gz && \
-    cd /build/salmon-0.11.3 && mkdir build && cd build && \
+RUN git clone https://github.com/COMBINE-lab/salmon.git && \
+	cd salmon && git checkout v0.13.1 && mkdir build && cd build && \
     cmake .. && make -j 4 && make install && cp ../lib/lib* /usr/local/lib/. && \
     cp ../bin/salmon /usr/local/bin/.
 

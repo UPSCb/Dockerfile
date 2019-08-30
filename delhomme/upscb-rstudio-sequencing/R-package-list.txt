@@ -9,10 +9,11 @@ DESeq
 DESeq2
 DEXSeq
 DiffBind
+DropletUtils
 easyRNASeq
 edgeR
 ensembldb
-EnsDb.Hsapiens.v75
+EnsDb.Hsapiens.v86
 genomeIntervals
 GenomicAlignments
 GenomicFeatures
@@ -20,10 +21,12 @@ Glimma
 gplots
 hexbin
 Homo.sapiens
+iSEE
 knitr
 leeBamViews
 limma
 LSD
+org.Hs.eg.db
 org.Mm.eg.db
 pheatmap
 RColorBrewer
@@ -42,6 +45,7 @@ SingleCellExperiment
 testthat
 TxDb.Dmelanogaster.UCSC.dm3.ensGene
 TxDb.Mmusculus.UCSC.mm10.ensGene
+tximeta
 tximport
 VennDiagram
 vsn
