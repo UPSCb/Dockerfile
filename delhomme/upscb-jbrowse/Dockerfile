@@ -24,7 +24,6 @@ WORKDIR /build
 ## create the User
 #########
 RUN groupadd -g 2000 training && useradd -m -u 2000 -g 2000 training
-RUN echo 'training:training' | chpasswd
 RUN chsh -s /bin/bash training
 RUN echo "alias ll='ls -la -G'" >> /home/training/.profile
 RUN	usermod -G training,www-data training
@@ -64,4 +63,5 @@ EXPOSE 80
 ### supervisord
 #########
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD pwgen /bin/pwgen
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
