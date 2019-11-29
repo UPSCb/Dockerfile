@@ -4,12 +4,18 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt install -y --fix-missing build-essential git nodejs
+RUN apt-get update && apt install -y --fix-missing build-essential git nodejs npm
 
 #########
 ### clone the repo
 #########
 RUN git clone https://github.com/UPSCb/course-web.git
+
+#########
+### install the packages
+#########
+WORKDIR /course-web
+RUN npm install
 
 #########
 ### PORT and CMD
@@ -25,4 +31,5 @@ VOLUME /course-web/public/materials
 #RUN apt install -y supervisor
 #ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
+WORKDIR /
 CMD ["nodejs","/course-web/bin/www"]

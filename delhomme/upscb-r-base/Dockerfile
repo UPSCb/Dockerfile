@@ -14,9 +14,9 @@ RUN	apt-get install -y --fix-missing build-essential wget
 RUN	DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
 #&& \
 RUN	apt-get install -y --fix-missing default-jdk ftp fort77 gfortran git libblas-dev libbz2-dev libcairo2-dev \
-	libcurl4-openssl-dev libghc-zlib-dev libgl1-mesa-dev libglu1-mesa-dev libncurses-dev libpcre3-dev libjpeg-dev \
-	libreadline-dev libudunits2-dev libx11-dev libxml2-dev libxt-dev liblzma-dev libzmq3-dev locales mesa-common-dev \
-	nano openblas-dev pandoc pandoc-citeproc pkg-config supervisor tcl-dev tk-dev texlive-latex-base texinfo \
+	libcurl4-openssl-dev libghc-zlib-dev libgl1-mesa-dev libglu1-mesa-dev libjpeg-dev libncurses-dev libopenblas-dev \
+	libpcre3-dev libreadline-dev libudunits2-dev libx11-dev libxml2-dev libxt-dev liblzma-dev libzmq3-dev locales \
+	mesa-common-dev nano pandoc pandoc-citeproc pkg-config supervisor tcl-dev tk-dev texlive-latex-base texinfo \
 	texlive-fonts-extra unzip x11-common zip && \
 	mkdir build
 WORKDIR /build

@@ -4,9 +4,9 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt-get install -y cmake default-jre git ftp libbz2-dev \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y cmake default-jre git ftp libbz2-dev \
 	libcairo2-dev libpango1.0-dev liblzma-dev librocksdb-dev nano openssl \
-	openssh-server python2.7-dev python-pip python3-dev python3-pip rapidjson-dev wget zlib1g-dev
+	openssh-server python2.7-dev python-pip python3-dev python3-pip rapidjson-dev tree wget zlib1g-dev
 
 #########
 ### Working dir
@@ -109,6 +109,12 @@ RUN rm -rf /build
 # Apache access to the home dir
 #########
 RUN ln -sf /home/training /var/www/html/home
+
+#########
+# Squash python3 error
+#########
+RUN echo "export LC_ALL=C.UTF-8" >> /home/training/.profile
+RUN echo "export LANG=C.UTF-8" >> /home/training/.profile
 
 #########
 ### Supervisor
