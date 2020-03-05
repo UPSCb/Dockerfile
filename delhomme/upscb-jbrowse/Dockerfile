@@ -4,8 +4,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update
-RUN	apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev locales supervisor
+RUN apt-get update && apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev locales supervisor
 
 #########
 ### Squash locale warnings
