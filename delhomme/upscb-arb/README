@@ -1,0 +1,1 @@
+If there is a Dockerfile.local, use that for the build. If not use the Dockerfile, but change the CHANGEME. Do not EVER commit the Dockerfile.local file.
