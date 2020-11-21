@@ -28,19 +28,21 @@ RUN rm -rf /var/lib/apt/lists/* \
 ENV LANG en_US.utf8
 
 #########
-### R version 3.6.1
+### R version 4.0.3
 #########
 # https://stat.ethz.ch/R/daily/R-devel.tar.gz && \
-RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-3/R-3.6.1.tar.gz && \
-    tar -zxf R-3.6.1.tar.gz && cd R-3.6.1 && \
+RUN wget http://ftp.acc.umu.se/mirror/CRAN/src/base/R-4/R-4.0.3.tar.gz && \
+    tar -zxf R-4.0.3.tar.gz && cd R-4.0.3 && \
 ## RUN wget https://stat.ethz.ch/R/daily/R-devel.tar.gz && \
 #    tar -zxf R-devel.tar.gz && cd R-devel && \
     ./configure --enable-memory-profiling -enable-R-shlib --with-blas --with-lapack --with-tcltk \
 	--with-valgrind-instrumentation=3 --with-readline --with-cairo --with-libpng --with-jpeglib \
 	--with-x=no && \
 ##    make && make pdf && make info && make install && make install-info && make install-pdf
-	make -j 16 && make check && make -j 16 pdf && make -j 16 info && make -j 16 install && \
-	make -j 16 install-info && make -j 16 install-pdf
+## no test 2020/10/07
+##	make -j 8 && make check && make -j 8 pdf && make -j 8 info && make -j 8 install && \
+	make -j 8 && make -j 8 pdf && make -j 8 info && make -j 8 install && \
+	make -j 8 install-info && make -j 8 install-pdf
 
 #########
 ### Cleanup

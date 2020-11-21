@@ -4,7 +4,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev locales supervisor
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt install -y build-essential curl unzip zip apache2 libghc-zlib-dev locales supervisor
 
 #########
 ### Squash locale warnings
@@ -38,13 +38,13 @@ RUN cpan App::cpanminus && cpanm PerlIO::gzip
 RUN rm -f /var/www/html/index.html
 WORKDIR /var/www/html
 # -L is needed as GitHub redirects to AWS S3
-RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.16.3-release/JBrowse-1.16.3.zip && \
-    unzip JBrowse-1.16.3.zip
-WORKDIR /var/www/html/JBrowse-1.16.3
+RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.16.10-release/JBrowse-1.16.10.zip && \
+    unzip JBrowse-1.16.10.zip
+WORKDIR /var/www/html/JBrowse-1.16.10
 RUN ./setup.sh && \
     chown -R www-data:www-data /var/www/html
 WORKDIR /
-RUN rm /var/www/html/JBrowse-1.16.3.zip
+RUN rm /var/www/html/JBrowse-1.16.10.zip
 
 #########
 ### Cleanup
@@ -55,7 +55,7 @@ RUN rm -rf build
 #########
 ### accessibility
 #########
-VOLUME /var/www/html/JBrowse-1.16.3/data
+VOLUME /var/www/html/JBrowse-1.16.10/data
 EXPOSE 80
 
 #########

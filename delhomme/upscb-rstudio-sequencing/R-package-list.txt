@@ -5,12 +5,10 @@ BSgenome.Dmelanogaster.UCSC.dm3
 BSgenome.Hsapiens.UCSC.hg19
 chipseq
 devtools
-DESeq
 DESeq2
 DEXSeq
 DiffBind
 DropletUtils
-easyRNASeq
 edgeR
 ensembldb
 EnsDb.Hsapiens.v86

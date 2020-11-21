@@ -4,7 +4,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt install -y curl libssh2-1-dev libmariadb-client-lgpl-dev imagemagick
+RUN apt-get update && apt install -y curl libssh2-1-dev librsvg2-dev libnode-dev libssl-dev imagemagick
 
 #########
 # R packages
@@ -20,8 +20,8 @@ RUN Rscript R-install-packages.R
 #########
 RUN	mkdir /build
 WORKDIR /build
-RUN curl ftp://130.239.72.87/Facility/Workshop/RnaSeqTutorial_0.99.12.tar.gz > RnaSeqTutorial_0.99.12.tar.gz
-RUN R CMD INSTALL RnaSeqTutorial_0.99.12.tar.gz
+RUN curl ftp://130.239.72.87/Facility/Workshop/RnaSeqTutorial_0.99.14.tar.gz > RnaSeqTutorial_0.99.14.tar.gz
+RUN R CMD INSTALL RnaSeqTutorial_0.99.14.tar.gz
 
 ########
 # GitHub package - kept as a reminder.

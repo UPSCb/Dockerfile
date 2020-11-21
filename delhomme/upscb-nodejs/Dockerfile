@@ -4,7 +4,7 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN apt-get update && apt install -y --fix-missing build-essential git nodejs npm
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt install -y --fix-missing build-essential git nodejs npm
 
 #########
 ### clone the repo

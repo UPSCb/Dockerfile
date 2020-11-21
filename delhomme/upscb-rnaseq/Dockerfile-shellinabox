@@ -15,18 +15,18 @@ RUN apt update && apt install -y cmake automake curl libboost-all-dev
 #########
 ### STAR
 #########
-RUN wget https://github.com/alexdobin/STAR/archive/2.7.0e.tar.gz && \
-	tar -xf 2.7.0e.tar.gz
-WORKDIR STAR-2.7.0e/bin/Linux_x86_64_static
+RUN wget https://github.com/alexdobin/STAR/archive/2.7.6a.tar.gz && \
+	tar -xf 2.7.6a.tar.gz
+WORKDIR STAR-2.7.6a/bin/Linux_x86_64_static
 RUN cp STAR /usr/local/bin
 WORKDIR /build
 
 #########
 ### kallisto
 #########
-RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.45.1/kallisto_linux-v0.45.1.tar.gz && \
-	tar -xf kallisto_linux-v0.45.1.tar.gz
-WORKDIR kallisto_linux-v0.45.1
+RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.46.2/kallisto_linux-v0.46.2.tar.gz && \
+	tar -xf kallisto_linux-v0.46.2.tar.gz
+WORKDIR kallisto
 RUN cp kallisto /usr/local/bin
 WORKDIR /build
 
@@ -39,8 +39,11 @@ WORKDIR /build
 #	cd salmon && git checkout v0.13.1 && mkdir build && cd build && \
 #    cmake .. && make -j 4 && make install && cp ../lib/lib* /usr/local/lib/. && \
 #    cp ../bin/salmon /usr/local/bin/.
-#RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.1.0/salmon-1.1.0_linux_x86_64.tar.gz && 
+#RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.1.0/salmon-1.1.0_linux_x86_64.tar.gz &&
 # mkdir build && cd build && wget https://github.com/COMBINE-lab/salmon/releases/download/v1.1.0/salmon-1.1.0_linux_x86_64.tar.gz && tar -zxf salmon-1.1.0_linux_x86_64.tar.gz && cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ && cp salmon-latest_linux_x86_64/lib/lib* /usr/local/lib/
+RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.3.0/salmon-1.3.0_linux_x86_64.tar.gz && \
+	tar -zxf salmon-1.3.0_linux_x86_64.tar.gz && cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ && \
+	cp salmon-latest_linux_x86_64/lib/lib* /usr/local/lib
 
 #########
 ### Pip installs: HTSeq

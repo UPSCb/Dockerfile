@@ -4,16 +4,18 @@ MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 #########
 ### Aptitude packages
 #########
-RUN     apt-get update
-RUN	apt-get install -y gdebi-core sudo libssl-dev && \
+# RStudio relies ona libssl version 1.0.0
+RUN 	echo "deb http://security.ubuntu.com/ubuntu xenial-security main" >> /etc/apt/sources.list
+RUN     apt update
+RUN	apt install -y gdebi-core sudo libssl1.0.0 && \
 	mkdir build
 WORKDIR /build
 
 #########
 ### Rstudio
 #########
-RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5019-amd64.deb && \
-    gdebi -n rstudio-server-1.2.5019-amd64.deb
+RUN wget https://download2.rstudio.org/server/xenial/amd64/rstudio-server-1.3.1093-amd64.deb && \
+    gdebi -n rstudio-server-1.3.1093-amd64.deb
 
 #########
 ### Cleanup
