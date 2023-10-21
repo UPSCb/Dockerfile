@@ -1,6 +1,7 @@
-FROM ubuntu
+FROM ubuntu:22.04
 MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 
+ARG COURSE=BUWS2301
 #########
 ### Aptitude packages
 #########
@@ -9,7 +10,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt install -y --fix-missin
 #########
 ### clone the repo
 #########
-RUN git clone https://github.com/UPSCb/course-web.git
+RUN git clone -b ${COURSE} https://github.com/UPSCb/course-web.git
 
 #########
 ### install the packages

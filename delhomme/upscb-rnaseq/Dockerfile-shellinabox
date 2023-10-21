@@ -1,71 +1,63 @@
-FROM delhomme/upscb-ngs-preprocessing:shellinabox
+FROM delhomme/upscb-ngs-preprocessing
 MAINTAINER Nicolas Delhomme (nicolas.delhomme@umu.se)
 
-#########
-### Working dir
-#########
+# Versions
+ARG CPU=4
+
+# STAR, kallisto, salmon
+ARG STR_VERSION=2.7.10b
+ARG KLT_VERSION=0.48.0
+ARG SLM_VERSION=1.10.0
+
+# Working dir
 RUN	mkdir build
 WORKDIR /build
 
-#########
-### Aptitude packages
-#########
-RUN apt update && apt install -y cmake automake curl libboost-all-dev
+# Aptitude packages
+# only needed for compiling salmon
+#RUN apt update && apt install -y cmake automake libboost-all-dev libtbb-dev libcereal-dev libjemalloc-dev
 
-#########
-### STAR
-#########
-RUN wget https://github.com/alexdobin/STAR/archive/2.7.6a.tar.gz && \
-	tar -xf 2.7.6a.tar.gz
-WORKDIR STAR-2.7.6a/bin/Linux_x86_64_static
-RUN cp STAR /usr/local/bin
-WORKDIR /build
+# STAR
+RUN curl -L -O https://github.com/alexdobin/STAR/archive/refs/tags/${STR_VERSION}.tar.gz && \
+  tar -xf ${STR_VERSION}.tar.gz && cd STAR-${STR_VERSION}/bin/Linux_x86_64_static && cp STAR /usr/local/bin
 
-#########
-### kallisto
-#########
-RUN wget https://github.com/pachterlab/kallisto/releases/download/v0.46.2/kallisto_linux-v0.46.2.tar.gz && \
-	tar -xf kallisto_linux-v0.46.2.tar.gz
-WORKDIR kallisto
-RUN cp kallisto /usr/local/bin
-WORKDIR /build
+# kallisto
+RUN curl -L -O  https://github.com/pachterlab/kallisto/releases/download/v${KLT_VERSION}/kallisto_linux-v${KLT_VERSION}.tar.gz && \
+	tar -xf kallisto_linux-v${KLT_VERSION}.tar.gz && cp kallisto/kallisto /usr/local/bin
 
-#########
-### Salmon
-#########
-WORKDIR /build
-# TODO update salmon
-#RUN git clone https://github.com/COMBINE-lab/salmon.git && \
-#	cd salmon && git checkout v0.13.1 && mkdir build && cd build && \
-#    cmake .. && make -j 4 && make install && cp ../lib/lib* /usr/local/lib/. && \
-#    cp ../bin/salmon /usr/local/bin/.
-#RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.1.0/salmon-1.1.0_linux_x86_64.tar.gz &&
-# mkdir build && cd build && wget https://github.com/COMBINE-lab/salmon/releases/download/v1.1.0/salmon-1.1.0_linux_x86_64.tar.gz && tar -zxf salmon-1.1.0_linux_x86_64.tar.gz && cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ && cp salmon-latest_linux_x86_64/lib/lib* /usr/local/lib/
-RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.3.0/salmon-1.3.0_linux_x86_64.tar.gz && \
-	tar -zxf salmon-1.3.0_linux_x86_64.tar.gz && cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ && \
-	cp salmon-latest_linux_x86_64/lib/lib* /usr/local/lib
+# Salmon
+# 2021-10-15 ships with libc6 which is system incompatible v < 2.29
+# so disabling the fetch of the archive
+#RUN curl -L -O https://github.com/COMBINE-lab/salmon/releases/download/v${SLM_VERSION}/salmon-${SLM_VERSION}_linux_x86_64.tar.gz && \
+#	tar -zxf salmon-${SLM_VERSION}_linux_x86_64.tar.gz && cp salmon-${SLM_VERSION}_linux_x86_64/bin/salmon /usr/local/bin/ && \
+#	cp salmon-${SLM_VERSION}_linux_x86_64/lib/lib* /usr/local/lib
 
-#########
-### Pip installs: HTSeq
-#########
-# PySam
-#RUN pip install htseq
+# installing in /opt instead
+RUN curl -L -O https://github.com/COMBINE-lab/salmon/releases/download/v${SLM_VERSION}/salmon-${SLM_VERSION}_linux_x86_64.tar.gz && \
+	tar -zxf salmon-${SLM_VERSION}_linux_x86_64.tar.gz && mkdir /opt/salmon && \
+	cp -r salmon-latest_linux_x86_64/bin /opt/salmon  && cp -r salmon-latest_linux_x86_64/lib /opt/salmon
+# Rob's no consistent...
+#	cp -r salmon-${SLM_VERSION}_linux_x86_64/bin /opt/salmon  && cp -r salmon-${SLM_VERSION}_linux_x86_64/lib /opt/salmon
+	
 
-#########
-### gffread
-#########
+# 2021-10-16 Salmon is a pain to build
+#RUN curl -L -O https://github.com/COMBINE-lab/salmon/archive/refs/tags/v${SLM_VERSION}.tar.gz && \
+#	tar -zxf v${SLM_VERSION}.tar.gz && cd salmon-${SLM_VERSION} && mkdir build && cd build && \
+#	cmake .. && make -j ${CPU} && make install && cp ../lib/lib* /usr/local/lib/ && \
+#	cp ../bin/salmon /usr/local/bin/
+
+# gffread
 WORKDIR /build
 RUN git clone https://github.com/gpertea/gclib && \
     git clone https://github.com/gpertea/gffread && \
-    cd gffread && make && cp gffread /usr/local/bin
+    cd gffread && make -j ${CPU} && cp gffread /usr/local/bin
 
-#########
-### Clean up
-#########
+# Clean up
 WORKDIR /
 RUN rm -rf /build
 
-#########
-### Ports and CMD
-#########
+# Extend path
+RUN echo 'export PATH=/opt/salmon/bin:$PATH' >> /home/training/.profile
+
+# CMD
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

@@ -38,13 +38,13 @@ RUN cpan App::cpanminus && cpanm PerlIO::gzip
 RUN rm -f /var/www/html/index.html
 WORKDIR /var/www/html
 # -L is needed as GitHub redirects to AWS S3
-RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.16.10-release/JBrowse-1.16.10.zip && \
-    unzip JBrowse-1.16.10.zip
-WORKDIR /var/www/html/JBrowse-1.16.10
+RUN curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.16.11-release/JBrowse-1.16.11.zip && \
+    unzip JBrowse-1.16.11.zip
+WORKDIR /var/www/html/JBrowse-1.16.11
 RUN ./setup.sh && \
     chown -R www-data:www-data /var/www/html
 WORKDIR /
-RUN rm /var/www/html/JBrowse-1.16.10.zip
+RUN rm /var/www/html/JBrowse-1.16.11.zip
 
 #########
 ### Cleanup
@@ -55,7 +55,7 @@ RUN rm -rf build
 #########
 ### accessibility
 #########
-VOLUME /var/www/html/JBrowse-1.16.10/data
+VOLUME /var/www/html/JBrowse-1.16.11/data
 EXPOSE 80
 
 #########
